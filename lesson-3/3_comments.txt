@@ -1,0 +1,17 @@
+Можно добавить таблицу стран. Плюс в эту таблицу можно добавить телефонный код страны, чтобы в дальнейшем уменьшить количество ошибок при вводе телефонных номеров и обеспечить их уникальность.
+
+CREATE TABLE profiles (
+  user_id INT UNSIGNED NOT NULL PRIMARY KEY COMMENT "Ссылка на пользователя", 
+  gender CHAR(1) NOT NULL COMMENT "Пол",
+  birthday DATE COMMENT "Дата рождения",
+  city VARCHAR(130) COMMENT "Город проживания",
+  country_id INT UNSIGNED NOT NULL PRIMARY KEY COMMENT "Ссылка на страну проживания",
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "Время создания строки",  
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT "Время обновления строки"
+) COMMENT "Профили"; 
+
+CREATE TABLE countries (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "Идентификатор страны", 
+  country VARCHAR(130) COMMENT "Страна",
+  phone_code VARCHAR(7) COMMENT "Телефонный код"
+) COMMENT "Страны";

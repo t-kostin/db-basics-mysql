@@ -1,0 +1,91 @@
+timur@mysql:~$ ls
+1_create_vk.sql  2_random_data.sql
+timur@mysql:~$ mysql --execute='CREATE DATABASE vk;'
+timur@mysql:~$ mysql vk < 2_random_data.sql
+timur@mysql:~$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 33
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use vk;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> USE vk;
+Database changed
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_vk        |
++---------------------+
+| communities         |
+| communities_users   |
+| friendship          |
+| friendship_statuses |
+| media               |
+| media_types         |
+| messages            |
+| profiles            |
+| users               |
++---------------------+
+9 rows in set (0.00 sec)
+
+mysql> DESCRIBE users;
++------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| Field      | Type         | Null | Key | Default           | Extra                                         |
++------------+--------------+------+-----+-------------------+-----------------------------------------------+
+| id         | int unsigned | NO   | PRI | NULL              | auto_increment                                |
+| first_name | varchar(100) | NO   |     | NULL              |                                               |
+| last_name  | varchar(100) | NO   |     | NULL              |                                               |
+| email      | varchar(100) | NO   | UNI | NULL              |                                               |
+| phone      | varchar(100) | NO   | UNI | NULL              |                                               |
+| created_at | datetime     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| updated_at | datetime     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++------------+--------------+------+-----+-------------------+-----------------------------------------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM users LIMIT 10;
++----+------------+---------------+--------------------------------+---------------------+---------------------+---------------------+
+| id | first_name | last_name     | email                          | phone               | created_at          | updated_at          |
++----+------------+---------------+--------------------------------+---------------------+---------------------+---------------------+
+|  1 | Alfonzo    | Runolfsdottir | ted.altenwerth@example.org     | +50(6)9035402941    | 1987-05-24 10:23:50 | 1984-04-17 02:07:11 |
+|  2 | Richmond   | Lueilwitz     | dallin.heidenreich@example.com | (458)277-3159x9673  | 1975-04-29 16:02:43 | 1990-07-22 18:06:55 |
+|  3 | Cecilia    | Kutch         | madisen11@example.org          | 282.588.2701        | 1988-08-31 08:30:27 | 1979-11-21 04:12:31 |
+|  4 | Chaya      | Harris        | areilly@example.com            | (278)889-7693       | 1988-10-05 22:04:51 | 1979-04-04 04:14:13 |
+|  5 | Haylee     | Pollich       | joany.kreiger@example.org      | (909)759-8538       | 2003-11-01 21:55:52 | 1989-09-22 17:38:18 |
+|  6 | Reinhold   | Wuckert       | qerdman@example.net            | 973-034-7701x777    | 1975-03-16 05:49:46 | 1997-11-13 16:49:23 |
+|  7 | Margaret   | Kreiger       | vernie.cronin@example.org      | 1-467-227-8696      | 1997-06-19 02:33:23 | 2020-08-06 21:05:00 |
+|  8 | Hassie     | Zemlak        | savion.rau@example.org         | 1-010-717-7181x7357 | 1991-12-15 03:18:18 | 1982-09-26 08:00:37 |
+|  9 | Nola       | Miller        | irwin15@example.com            | 1-740-680-4574      | 1974-09-23 14:54:58 | 1982-02-27 06:15:49 |
+| 10 | Rashawn    | Stracke       | jschinner@example.com          | 1-600-594-2956      | 1970-11-08 17:17:23 | 2006-02-18 11:42:09 |
++----+------------+---------------+--------------------------------+---------------------+---------------------+---------------------+
+10 rows in set (0.01 sec)
+
+mysql> SELECT * FROM friendship LIMIT 10;
++---------+-----------+----------------------+---------------------+---------------------+---------------------+---------------------+
+| user_id | friend_id | friendship_status_id | requested_at        | confirmed_at        | created_at          | updated_at          |
++---------+-----------+----------------------+---------------------+---------------------+---------------------+---------------------+
+|       5 |        69 |                    8 | 2013-06-19 00:47:51 | 2016-03-27 22:40:53 | 2001-10-30 12:09:28 | 1991-07-24 06:33:34 |
+|       6 |        12 |                    2 | 2020-09-22 09:38:13 | 2010-01-12 03:36:50 | 1999-06-07 05:43:17 | 2007-05-26 00:50:44 |
+|       6 |        31 |                    7 | 1979-05-28 06:32:24 | 1984-04-11 22:46:44 | 1987-06-02 07:15:57 | 1973-08-27 10:24:43 |
+|       7 |        49 |                    6 | 2007-12-21 11:34:26 | 2013-11-11 13:40:16 | 2017-05-31 16:23:27 | 1991-12-11 10:27:16 |
+|       9 |        63 |                    8 | 1988-10-01 23:45:39 | 2002-10-03 11:48:49 | 1993-08-20 18:03:15 | 2011-07-16 20:34:14 |
+|      11 |        73 |                    7 | 1992-05-22 18:14:39 | 1991-09-21 00:36:30 | 2004-04-13 23:48:53 | 1991-10-12 20:23:31 |
+|      12 |        92 |                    6 | 1992-06-26 18:12:56 | 1974-05-17 05:38:27 | 1999-03-28 22:06:43 | 1997-01-12 22:02:04 |
+|      13 |       100 |                   10 | 2016-07-23 18:41:41 | 2001-09-10 21:49:37 | 2001-06-28 00:27:58 | 1971-06-26 14:17:53 |
+|      15 |        18 |                    4 | 1972-08-10 23:30:33 | 1980-11-08 11:42:02 | 2015-11-06 08:00:00 | 1981-06-09 06:23:00 |
+|      17 |        64 |                    9 | 2008-08-29 00:30:15 | 2018-02-27 15:47:01 | 1976-08-04 23:33:41 | 2004-07-27 20:40:36 |
++---------+-----------+----------------------+---------------------+---------------------+---------------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> \q
+Bye
+timur@mysql:~$
