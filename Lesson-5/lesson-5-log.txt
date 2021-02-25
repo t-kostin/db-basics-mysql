@@ -1,0 +1,318 @@
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 41
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Reading history-file /home/timur/.mysql_history
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> \. lesson-5-code.sql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+--------------
+CREATE TEMPORARY TABLE wrong_users LIKE users
+--------------
+
+Query OK, 0 rows affected (0.01 sec)
+
+--------------
+INSERT INTO wrong_users SELECT * FROM users
+--------------
+
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+--------------
+UPDATE wrong_users SET created_at = NULL, updated_at = NULL
+--------------
+
+Query OK, 6 rows affected (0.00 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+--------------
+DESC wrong_users
+--------------
+
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+| Field       | Type            | Null | Key | Default           | Extra                       |
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+| id          | bigint unsigned | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(255)    | YES  |     | NULL              | NULL                        |
+| birthday_at | date            | YES  |     | NULL              | NULL                        |
+| created_at  | datetime        | YES  |     | CURRENT_TIMESTAMP | NULL                        |
+| updated_at  | datetime        | YES  |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM wrong_users
+--------------
+
++----+--------------------+-------------+------------+------------+
+| id | name               | birthday_at | created_at | updated_at |
++----+--------------------+-------------+------------+------------+
+|  1 | Геннадий           | 1990-10-05  | NULL       | NULL       |
+|  2 | Наталья            | 1984-11-12  | NULL       | NULL       |
+|  3 | Александр          | 1985-05-20  | NULL       | NULL       |
+|  4 | Сергей             | 1988-02-14  | NULL       | NULL       |
+|  5 | Иван               | 2001-01-12  | NULL       | NULL       |
+|  6 | Мария              | 1992-08-29  | NULL       | NULL       |
++----+--------------------+-------------+------------+------------+
+6 rows in set (0.00 sec)
+
+--------------
+UPDATE wrong_users SET created_at = NOW()
+--------------
+
+Query OK, 6 rows affected (0.00 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+--------------
+SELECT * FROM wrong_users
+--------------
+
++----+--------------------+-------------+---------------------+---------------------+
+| id | name               | birthday_at | created_at          | updated_at          |
++----+--------------------+-------------+---------------------+---------------------+
+|  1 | Геннадий           | 1990-10-05  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
+|  2 | Наталья            | 1984-11-12  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
+|  3 | Александр          | 1985-05-20  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
+|  4 | Сергей             | 1988-02-14  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
+|  5 | Иван               | 2001-01-12  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
+|  6 | Мария              | 1992-08-29  | 2021-02-23 13:08:27 | 2021-02-23 13:08:27 |
++----+--------------------+-------------+---------------------+---------------------+
+6 rows in set (0.00 sec)
+
+--------------
+CREATE TEMPORARY TABLE wrong_dates LIKE users
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+ALTER TABLE wrong_dates
+	MODIFY created_at VARCHAR(20),
+	MODIFY updated_at VARCHAR(20)
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+--------------
+INSERT INTO wrong_dates VALUES
+	(1, 'Геннадий', '1990-10-05', '20.10.2016 08:10', '20.10.2018 18:00'),
+	(2, 'Наталья', '1984-11-12', '31.12.2017 20:10', '20.10.2018 17:33'),
+	(3, 'Александр', '1985-05-20', '03.04.2017 16:22', '12.11.2017 15:30')
+--------------
+
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+--------------
+DESC wrong_dates
+--------------
+
++-------------+-----------------+------+-----+---------+----------------+
+| Field       | Type            | Null | Key | Default | Extra          |
++-------------+-----------------+------+-----+---------+----------------+
+| id          | bigint unsigned | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(255)    | YES  |     | NULL    | NULL           |
+| birthday_at | date            | YES  |     | NULL    | NULL           |
+| created_at  | varchar(20)     | YES  |     | NULL    | NULL           |
+| updated_at  | varchar(20)     | YES  |     | NULL    | NULL           |
++-------------+-----------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM wrong_dates
+--------------
+
++----+--------------------+-------------+------------------+------------------+
+| id | name               | birthday_at | created_at       | updated_at       |
++----+--------------------+-------------+------------------+------------------+
+|  1 | Геннадий           | 1990-10-05  | 20.10.2016 08:10 | 20.10.2018 18:00 |
+|  2 | Наталья            | 1984-11-12  | 31.12.2017 20:10 | 20.10.2018 17:33 |
+|  3 | Александр          | 1985-05-20  | 03.04.2017 16:22 | 12.11.2017 15:30 |
++----+--------------------+-------------+------------------+------------------+
+3 rows in set (0.00 sec)
+
+--------------
+UPDATE wrong_dates SET
+	created_at = STR_TO_DATE(created_at, '%d.%m.%Y %H:%i'),
+	updated_at = STR_TO_DATE(updated_at, '%d.%m.%Y %H:%i')
+--------------
+
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+--------------
+ALTER TABLE wrong_dates
+	MODIFY created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	MODIFY updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+--------------
+
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+--------------
+DESC wrong_dates
+--------------
+
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+| Field       | Type            | Null | Key | Default           | Extra                       |
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+| id          | bigint unsigned | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(255)    | YES  |     | NULL              | NULL                        |
+| birthday_at | date            | YES  |     | NULL              | NULL                        |
+| created_at  | datetime        | YES  |     | CURRENT_TIMESTAMP | NULL                        |
+| updated_at  | datetime        | YES  |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+-----------------+------+-----+-------------------+-----------------------------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM wrong_dates
+--------------
+
++----+--------------------+-------------+---------------------+---------------------+
+| id | name               | birthday_at | created_at          | updated_at          |
++----+--------------------+-------------+---------------------+---------------------+
+|  1 | Геннадий           | 1990-10-05  | 2016-10-20 08:10:00 | 2018-10-20 18:00:00 |
+|  2 | Наталья            | 1984-11-12  | 2017-12-31 20:10:00 | 2018-10-20 17:33:00 |
+|  3 | Александр          | 1985-05-20  | 2017-04-03 16:22:00 | 2017-11-12 15:30:00 |
++----+--------------------+-------------+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+--------------
+DESC storehouses_products
+--------------
+
++---------------+-----------------+------+-----+-------------------+-----------------------------------------------+
+| Field         | Type            | Null | Key | Default           | Extra                                         |
++---------------+-----------------+------+-----+-------------------+-----------------------------------------------+
+| id            | bigint unsigned | NO   | PRI | NULL              | auto_increment                                |
+| storehouse_id | int unsigned    | YES  |     | NULL              |                                               |
+| product_id    | int unsigned    | YES  |     | NULL              |                                               |
+| value         | int unsigned    | YES  |     | NULL              |                                               |
+| created_at    | datetime        | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED                             |
+| updated_at    | datetime        | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++---------------+-----------------+------+-----+-------------------+-----------------------------------------------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM storehouses_products
+--------------
+
++----+---------------+------------+-------+---------------------+---------------------+
+| id | storehouse_id | product_id | value | created_at          | updated_at          |
++----+---------------+------------+-------+---------------------+---------------------+
+|  1 |             1 |          1 |   100 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  2 |             1 |          2 |    10 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  3 |             1 |          3 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  4 |             1 |          4 |    17 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  5 |             1 |          5 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  6 |             1 |          6 |    55 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  7 |             1 |          7 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
++----+---------------+------------+-------+---------------------+---------------------+
+7 rows in set (0.01 sec)
+
+--------------
+SELECT * FROM storehouses_products ORDER BY IF(value > 0, 1, 2), value
+--------------
+
++----+---------------+------------+-------+---------------------+---------------------+
+| id | storehouse_id | product_id | value | created_at          | updated_at          |
++----+---------------+------------+-------+---------------------+---------------------+
+|  2 |             1 |          2 |    10 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  4 |             1 |          4 |    17 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  6 |             1 |          6 |    55 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  1 |             1 |          1 |   100 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  3 |             1 |          3 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  5 |             1 |          5 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
+|  7 |             1 |          7 |     0 | 2021-02-23 11:54:48 | 2021-02-23 11:54:48 |
++----+---------------+------------+-------+---------------------+---------------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM users WHERE MONTHNAME(birthday_at) IN ('may', 'august')
+--------------
+
++----+--------------------+-------------+---------------------+---------------------+
+| id | name               | birthday_at | created_at          | updated_at          |
++----+--------------------+-------------+---------------------+---------------------+
+|  3 | Александр          | 1985-05-20  | 2021-02-23 11:54:47 | 2021-02-23 11:54:47 |
+|  6 | Мария              | 1992-08-29  | 2021-02-23 11:54:47 | 2021-02-23 11:54:47 |
++----+--------------------+-------------+---------------------+---------------------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM catalogs WHERE id IN (5, 1, 2)
+--------------
+
++----+-------------------------------------+
+| id | name                                |
++----+-------------------------------------+
+|  1 | Процессоры                          |
+|  2 | Материнские платы                   |
+|  5 | Оперативная память                  |
++----+-------------------------------------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM catalogs WHERE id IN (5, 1, 2) ORDER BY FIELD(id, 5, 1, 2)
+--------------
+
++----+-------------------------------------+
+| id | name                                |
++----+-------------------------------------+
+|  5 | Оперативная память                  |
+|  1 | Процессоры                          |
+|  2 | Материнские платы                   |
++----+-------------------------------------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT AVG(TIMESTAMPDIFF(YEAR, birthday_at, NOW())) AS average_age FROM users
+--------------
+
++-------------+
+| average_age |
++-------------+
+|     30.3333 |
++-------------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT COUNT(*) AS birthdays, DAYNAME(CONCAT(YEAR(NOW()), DATE_FORMAT(birthday_at, '-%m-%d'))) AS week_day
+  FROM users
+  GROUP BY week_day
+--------------
+
++-----------+----------+
+| birthdays | week_day |
++-----------+----------+
+|         2 | Tuesday  |
+|         1 | Friday   |
+|         1 | Thursday |
+|         2 | Sunday   |
++-----------+----------+
+4 rows in set (0.00 sec)
+
+--------------
+SELECT ROUND(EXP(SUM(LN(id))), 0) FROM products
+--------------
+
++----------------------------+
+| ROUND(EXP(SUM(LN(id))), 0) |
++----------------------------+
+|                       5040 |
++----------------------------+
+1 row in set (0.00 sec)
+
+mysql> exit
