@@ -1,0 +1,110 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 80
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Reading history-file /home/timur/.mysql_history
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> \. task-3-5-code.sql
+--------------
+SELECT COUNT(*) FROM likes WHERE user_id IN (
+	SELECT user_id FROM profiles WHERE profiles.gender = 'F')
+--------------
+
++----------+
+| COUNT(*) |
++----------+
+|     1558 |
++----------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT COUNT(*) FROM likes WHERE user_id IN (
+        SELECT user_id FROM profiles WHERE profiles.gender = 'M')
+--------------
+
++----------+
+| COUNT(*) |
++----------+
+|     1011 |
++----------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT IF(
+	(SELECT COUNT(*) FROM likes WHERE user_id IN (
+		SELECT user_id FROM profiles WHERE profiles.gender = 'M')) >
+	((SELECT COUNT(*) FROM likes) / 2),
+	'Мужчины поставили больше лайков',
+	'Женщины поставили больше лайков') AS Answer
+--------------
+
++-------------------------------------------------------------+
+| Answer                                                      |
++-------------------------------------------------------------+
+| Женщины поставили больше лайков                             |
++-------------------------------------------------------------+
+1 row in set (0.04 sec)
+
+--------------
+SELECT birthday FROM profiles ORDER BY birthday DESC LIMIT 10
+--------------
+
++------------+
+| birthday   |
++------------+
+| 2020-09-04 |
+| 2020-07-09 |
+| 2020-06-10 |
+| 2020-02-24 |
+| 2019-07-22 |
+| 2018-02-10 |
+| 2017-05-16 |
+| 2016-04-01 |
+| 2015-12-24 |
+| 2015-05-08 |
++------------+
+10 rows in set (0.00 sec)
+
+--------------
+SELECT COUNT(*) FROM likes WHERE user_id IN (
+	SELECT user_id FROM profiles WHERE birthday >= '2015-05-08')
+--------------
+
++----------+
+| COUNT(*) |
++----------+
+|      278 |
++----------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT user_id, COUNT(*) AS activity FROM posts GROUP BY user_id HAVING activity < 3
+--------------
+
++---------+----------+
+| user_id | activity |
++---------+----------+
+|       6 |        2 |
+|      15 |        2 |
+|      20 |        2 |
+|      51 |        2 |
+|      58 |        2 |
+|      65 |        1 |
+|      71 |        1 |
+|      74 |        2 |
+|      87 |        2 |
+|      94 |        2 |
++---------+----------+
+10 rows in set (0.00 sec)
+
+mysql> exit
