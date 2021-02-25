@@ -1,0 +1,152 @@
+timur@mysql:~/lesson-6$ mysql vk < 1_likes_generated.sql
+timur@mysql:~/lesson-6$ mysql vk
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 53
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> -- Удаляем лайки пользователей, которые ссылаются на user_id больше 100
+mysql> -- (в базе данных всего 100 пользователей)
+mysql> DELETE FROM likes WHERE target_type_id = 2 and target_id > 100;
+Query OK, 631 rows affected (0.02 sec)
+
+mysql> exit
+Bye
+timur@mysql:~/lesson-6$
+timur@mysql:~/lesson-6$ mysql vk < 1_posts_generated.sql
+timur@mysql:~/lesson-6$ mysql vk
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 59
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_vk        |
++---------------------+
+| communities         |
+| communities_users   |
+| friendship          |
+| friendship_statuses |
+| likes               |
+| media               |
+| media_types         |
+| messages            |
+| posts               |
+| profiles            |
+| users               |
++---------------------+
+11 rows in set (0.00 sec)
+
+mysql> exit
+Bye
+timur@mysql:~/lesson-6$ mysql vk < 1_target_types.sql
+timur@mysql:~/lesson-6$ mysql vk
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 61
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_vk        |
++---------------------+
+| communities         |
+| communities_users   |
+| friendship          |
+| friendship_statuses |
+| likes               |
+| media               |
+| media_types         |
+| messages            |
+| posts               |
+| profiles            |
+| target_types        |
+| users               |
++---------------------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT * FROM likes LIMIT 10;
++----+---------+-----------+----------------+---------------------+
+| id | user_id | target_id | target_type_id | created_at          |
++----+---------+-----------+----------------+---------------------+
+|  1 |      68 |        93 |              4 | 1977-11-12 15:12:35 |
+|  2 |      10 |        75 |              3 | 1978-12-02 22:37:44 |
+|  5 |      62 |       394 |              4 | 2013-11-30 16:03:57 |
+|  6 |       8 |       460 |              3 | 2005-05-11 20:56:31 |
+|  8 |      59 |       400 |              4 | 1980-01-12 11:59:30 |
+| 10 |      80 |       235 |              4 | 1984-04-19 13:44:26 |
+| 11 |      84 |       101 |              3 | 1999-08-15 01:25:41 |
+| 12 |      63 |       338 |              1 | 2000-11-09 04:40:44 |
+| 13 |      92 |       429 |              1 | 2010-08-31 02:47:54 |
+| 14 |      72 |       449 |              1 | 2018-05-07 08:21:48 |
++----+---------+-----------+----------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM posts LIMIT 2\G
+*************************** 1. row ***************************
+          id: 1
+     user_id: 98
+community_id: 1
+        head: qui
+        body: Atque consectetur iste et aut sunt. Est aut distinctio voluptatem ea esse. Cum quaerat minus quia. Qui voluptatum sint ipsum accusantium magnam rem possimus.
+    media_id: 53
+   is_public: 0
+ is_archived: 0
+  created_at: 1996-04-27 10:54:26
+  updated_at: 1990-02-16 15:29:44
+*************************** 2. row ***************************
+          id: 2
+     user_id: 85
+community_id: 17
+        head: accusamus
+        body: Ea quo eos reiciendis et nemo. Atque delectus animi quis dignissimos. Et amet neque quis recusandae ducimus sed ut. Similique mollitia omnis assumenda.
+    media_id: 319
+   is_public: 0
+ is_archived: 0
+  created_at: 1971-07-14 02:07:58
+  updated_at: 2016-04-29 03:30:25
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM target_types;
++----+----------+---------------------+
+| id | name     | created_at          |
++----+----------+---------------------+
+|  1 | messages | 2021-02-25 16:57:20 |
+|  2 | users    | 2021-02-25 16:57:20 |
+|  3 | media    | 2021-02-25 16:57:20 |
+|  4 | posts    | 2021-02-25 16:57:20 |
++----+----------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql>
