@@ -1,0 +1,79 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Reading history-file /home/timur/.mysql_history
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> \. lesson-8-tasks-code.sql
+--------------
+SELECT COUNT(likes.user_id) AS total, profiles.gender
+	FROM likes
+	LEFT JOIN profiles
+	ON likes.user_id = profiles.user_id
+	GROUP BY profiles.gender
+	ORDER BY total DESC
+	LIMIT 1
+--------------
+
++-------+--------+
+| total | gender |
++-------+--------+
+|  1558 | F      |
++-------+--------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT SUM(total_likes) FROM (
+	SELECT COUNT(likes.target_id) AS total_likes
+		FROM profiles 
+		LEFT JOIN likes 
+		ON profiles.user_id = likes.target_id AND target_type_id = 2
+		GROUP BY profiles.birthday
+		ORDER BY profiles.birthday DESC
+		LIMIT 10) AS res_table
+--------------
+
++------------------+
+| SUM(total_likes) |
++------------------+
+|               15 |
++------------------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT users.id, COUNT(DISTINCT(messages.id)) + COUNT(DISTINCT(likes.id)) + COUNT(DISTINCT(posts.id)) AS activity
+	FROM users
+	JOIN (messages, likes, posts)
+	ON (messages.from_user_id = users.id AND likes.user_id = users.id AND posts.user_id = users.id)
+	GROUP BY users.id
+	ORDER BY activity
+	LIMIT 10
+--------------
+
++----+----------+
+| id | activity |
++----+----------+
+| 27 |       21 |
+|  6 |       23 |
+| 51 |       23 |
+| 22 |       25 |
+| 64 |       25 |
+| 43 |       26 |
+| 79 |       26 |
+| 95 |       27 |
+| 65 |       27 |
+| 45 |       28 |
++----+----------+
+10 rows in set (0.03 sec)
+
+mysql> exit
